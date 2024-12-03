@@ -1,4 +1,4 @@
-import { FacebookAuthProvider, getAuth, GoogleAuthProvider, signInWithPopup, signOut, TwitterAuthProvider } from "firebase/auth";
+import { createUserWithEmailAndPassword, FacebookAuthProvider, getAuth, GoogleAuthProvider, signInWithPopup, signOut, TwitterAuthProvider } from "firebase/auth";
 import app from './../../firebase_config';
 import { FaGoogle } from "react-icons/fa";
 import { FaTwitter } from "react-icons/fa";
@@ -12,14 +12,41 @@ import toast, { Toaster } from "react-hot-toast";
 
 const Registration = () => {
    const { user, setUser } = useContext(UserCheckerContext);
-   const [showPassword, setShowPassword] = useState()
+   const [showPassword, setShowPassword] = useState();
+   const [passError, setPassError] = useState();
    const auth = getAuth(app)
    const handleSubmit = (e) => {
+      // enchance the default behaviour
       e.preventDefault();
+      // get inputs value
       const email = e.target.email.value;
       const password = e.target.password.value;
-      const tarms = e.target.tarms.checked;
+      const acceptTerms = e.target.terms.checked;
+
+      // password varification with reguler exprassion
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      setPassError("")
+      if (!passwordRegex.test(password)) {
+         setPassError("A minimum 8 characters password contains a combination of uppercase and lowercase letter and number are required.")
+         return;
+      } else if (!acceptTerms) {
+         setPassError("Please accept our terms and conditions")
+         return;
+      } else {
+         setPassError("")
+      }
+      // Create account or signup with email and password
+      createUserWithEmailAndPassword(auth, email, password)
+         .then(result => {
+            toast.success("User Created successfully!")
+            console.log(result.user)
+         })
+         .catch(err => {
+            const errorCode = err.code;
+            toast.error(errorCode)
+         })
    }
+   // Login with google,Facebook and twitter
    //signUp with google 
    const SignUpWithGoogle = () => {
       const GoogleProvider = new GoogleAuthProvider();
@@ -57,7 +84,7 @@ const Registration = () => {
          .catch(err => toast.error("Sign Out Faild! Please try again"))
    }
    return (
-      <div className=" bg-violet-900 rounded-lg w-full sm:w-1/2 md:w-1/3 mt-5 mx-auto">
+      <div className=" bg-violet-900 rounded-lg w-full md:w-1/2 lg:w-1/3 mt-5 mx-auto">
          <form className="card-body" onSubmit={handleSubmit}>
             <div className="form-control">
                <label className="label">
@@ -72,7 +99,9 @@ const Registration = () => {
                <div className="join">
                   <input name="password" type={showPassword ? "text" : "password"} placeholder="password" className="w-full join-item input input-bordered" required />
                   <button onClick={() => setShowPassword(!showPassword)} className="join-item px-2 text-lg bg-base-100"> {showPassword ? <IoEye /> : <IoMdEyeOff />} </button>
-               </div>               <label className="label">
+               </div>
+               <p className="text-xs text-red-600 p-1 transition-all">{passError}</p>
+               <label className="label">
                   <a href="#" className="label-text-alt link link-hover">Forgot password? </a>
                </label>
             </div>
