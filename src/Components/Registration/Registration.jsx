@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, FacebookAuthProvider, getAuth, GoogleAuthProvider, sendPasswordResetEmail, signInWithPopup, signOut, TwitterAuthProvider } from "firebase/auth";
+import { createUserWithEmailAndPassword, FacebookAuthProvider, getAuth, GoogleAuthProvider, sendEmailVerification, sendPasswordResetEmail, signInWithPopup, signOut, TwitterAuthProvider } from "firebase/auth";
 import app from './../../firebase_config';
 import { FaGoogle } from "react-icons/fa";
 import { FaTwitter } from "react-icons/fa";
@@ -38,8 +38,14 @@ const Registration = () => {
       // Create account or signup with email and password
       createUserWithEmailAndPassword(auth, email, password)
          .then(result => {
+            //verify your email lest unauthorized eamil couldn't loggedin
+            sendEmailVerification(result.user)
+               .then(() => {
+                  alert("please Check your Eamil and verify your account")
+                  return;
+               })
+               .catch(err => console.error(err))
             toast.success("User Created successfully!")
-            console.log(result.user)
          })
          .catch(err => {
             const errorCode = err.code;
