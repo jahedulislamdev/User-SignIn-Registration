@@ -3,7 +3,7 @@ import app from './../../firebase_config';
 import { FaGoogle } from "react-icons/fa";
 import { FaTwitter } from "react-icons/fa";
 import { FaFacebook } from "react-icons/fa";
-import { useContext, useRef, useState } from "react";
+import { useContext, useState } from "react";
 import { UserCheckerContext } from "../../App";
 import { NavLink } from "react-router-dom";
 import { IoEye } from "react-icons/io5";
@@ -95,21 +95,7 @@ const Registration = () => {
          })
          .catch(err => toast.error("Sign Out Faild! Please try again"))
    }
-   // Change password with forgate email 
-   const EmailRef = useRef();
-   const handleForgateEmail = (e) => {
-      const validEmail = EmailRef.current.value;
-      if (!validEmail) {
-         toast.error("Please Provide an Email")
-         return;
-      } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(validEmail)) {
-         toast.error("Please write a valid email");
-         return;
-      }
-      sendPasswordResetEmail(auth, validEmail)
-         .then(toast.success("we send an Email within a few munites, Please varify"))
-         .catch(err => toast.error(err));
-   }
+
    return (
       <div className=" bg-violet-900 rounded-lg w-full md:w-1/2 lg:w-1/3 mt-5 mx-auto">
          <form className="card-body" onSubmit={handleSubmit}>
@@ -123,7 +109,7 @@ const Registration = () => {
                <label className="label">
                   <span className="label-text">Email</span>
                </label>
-               <input ref={EmailRef} name="email" type="email" placeholder="Your Email" className="input input-bordered" required />
+               <input name="email" type="email" placeholder="Your Email" className="input input-bordered" required />
             </div>
             <div className="form-control">
                <label className="label">
@@ -135,7 +121,7 @@ const Registration = () => {
                </div>
                <p className="text-xs text-red-600 p-1 transition-all">{Err}</p>
                <label className="label">
-                  <a onClick={handleForgateEmail} href="#" className="label-text-alt link link-hover">Forgot password? </a>
+                  <a href="#" className="label-text-alt link link-hover">Forgot password? </a>
                </label>
             </div>
             <div className='flex'>
