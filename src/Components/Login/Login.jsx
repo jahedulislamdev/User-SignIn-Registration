@@ -9,7 +9,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 const Login = () => {
    const auth = getAuth(app); // always need this auth
-   const { user } = useContext(UserCheckerContext);
+   const { user, setUser } = useContext(UserCheckerContext);
    const [showPassword, setShowPassword] = useState();
    const handleSignIn = (e) => {
       e.preventDefault();
@@ -22,6 +22,8 @@ const Login = () => {
          .then((res) => {
             if (res.user.emailVerified) {
                toast.success("Login Successfull")
+               console.log(res.user)
+               setUser(res.user)
             } else {
                toast.error("Unautherized Email")
             }
@@ -49,7 +51,7 @@ const Login = () => {
                   <input name="password" type={showPassword ? "text" : "password"} placeholder="password" className="w-full join-item input input-bordered" required />
                   <button onClick={() => setShowPassword(!showPassword)} className="join-item px-2 text-lg bg-base-100"> {showPassword ? <IoEye /> : <IoMdEyeOff />} </button>
                </div>
-               <div className="flex items-center justify-between space-x-4">
+               <div className="flex items-center justify-between md:space-x-4">
                   <div className='flex'>
                      <input type="checkbox" name='terms' id='terms' />
                      <label className='ms-1 sm:text-sm' htmlFor="terms">Remember me</label>

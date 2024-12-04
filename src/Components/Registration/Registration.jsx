@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, FacebookAuthProvider, getAuth, GoogleAuthProvider, sendEmailVerification, sendPasswordResetEmail, signInWithPopup, signOut, TwitterAuthProvider } from "firebase/auth";
+import { createUserWithEmailAndPassword, FacebookAuthProvider, getAuth, GoogleAuthProvider, sendEmailVerification, sendPasswordResetEmail, signInWithPopup, signOut, TwitterAuthProvider, updateProfile } from "firebase/auth";
 import app from './../../firebase_config';
 import { FaGoogle } from "react-icons/fa";
 import { FaTwitter } from "react-icons/fa";
@@ -19,6 +19,7 @@ const Registration = () => {
       // enchance the default behaviour
       e.preventDefault();
       // get inputs value
+      const name = e.target.name.value;
       const email = e.target.email.value;
       const password = e.target.password.value;
       const acceptTerms = e.target.terms.checked;
@@ -38,6 +39,11 @@ const Registration = () => {
       // Create account or signup with email and password
       createUserWithEmailAndPassword(auth, email, password)
          .then(result => {
+            // update your profle Accroding to your Data
+            updateProfile(result.user, {
+               displayName: name,
+            })
+
             //verify your email lest unauthorized eamil couldn't loggedin
             sendEmailVerification(result.user)
                .then(() => {
@@ -107,6 +113,12 @@ const Registration = () => {
    return (
       <div className=" bg-violet-900 rounded-lg w-full md:w-1/2 lg:w-1/3 mt-5 mx-auto">
          <form className="card-body" onSubmit={handleSubmit}>
+            <div className="form-control">
+               <label className="label">
+                  <span className="label-text">Name</span>
+               </label>
+               <input name="name" type="text" placeholder="Your Name" className="input input-bordered" required />
+            </div>
             <div className="form-control">
                <label className="label">
                   <span className="label-text">Email</span>
