@@ -11,7 +11,7 @@ import { IoMdEyeOff } from "react-icons/io";
 import toast, { Toaster } from "react-hot-toast";
 
 const Registration = () => {
-   const { user, setUser } = useContext(UserCheckerContext);
+   const { setUser } = useContext(UserCheckerContext);
    const [showPassword, setShowPassword] = useState();
    const [Err, setError] = useState();
    const auth = getAuth(app)
@@ -67,7 +67,7 @@ const Registration = () => {
             setUser(result.user)
             toast.success("SignUp with Google successfull")
          })
-         .catch(err => toast.error("Login Faild! Please try again"))
+         .catch(() => toast.error("Login Faild! Please try again"))
    }
    //SignUp with twitter
    const SignUpWithTwitter = () => {
@@ -77,25 +77,15 @@ const Registration = () => {
             setUser(result.user)
             toast.success("SignUp with Twitter successfull")
          })
-         .catch(err => toast.error("Sign Up Faild! Please try again"))
+         .catch(() => toast.error("Sign Up Faild! Please try again"))
    }
    //signUp with facebook 
    const SignUpWithFacebook = () => {
       const FacebookProvider = new FacebookAuthProvider();
       signInWithPopup(auth, FacebookProvider)
-         .then(result => toast.success("Sign Up with facebook successfull"))
-         .catch(err => toast.error("Sign Up Faild! Please try again"))
+         .then(() => toast.success("Sign Up with facebook successfull"))
+         .catch(() => toast.error("Sign Up Faild! Please try again"))
    }
-   //handle Signout
-   const handleSignOut = () => {
-      signOut(auth)
-         .then(() => {
-            setUser(null)
-            toast.success("Sign Out Successfull")
-         })
-         .catch(err => toast.error("Sign Out Faild! Please try again"))
-   }
-
    return (
       <div className=" bg-violet-900 rounded-lg w-full md:w-1/2 lg:w-1/3 mt-5 mx-auto">
          <form className="card-body" onSubmit={handleSubmit}>
@@ -120,17 +110,13 @@ const Registration = () => {
                   <button onClick={() => setShowPassword(!showPassword)} className="join-item px-2 text-lg bg-base-100"> {showPassword ? <IoEye /> : <IoMdEyeOff />} </button>
                </div>
                <p className="text-xs text-red-600 p-1 transition-all">{Err}</p>
-               <label className="label">
-                  <a href="#" className="label-text-alt link link-hover">Forgot password? </a>
-               </label>
             </div>
-            <div className='flex'>
+            <div className='flex px-2'>
                <input type="checkbox" name='terms' id='terms' />
-               <label className='ms-1 sm:text-sm ' htmlFor="terms">Accept our <a href="#">Terms and conditions</a></label>
+               <label className='ms-1 sm:text-sm ' htmlFor="terms">Accept our <a href="#" className="text-blue-500">Terms and conditions</a></label>
             </div>
             <div className="form-control mt-3">
-               {user ? <button onClick={handleSignOut} className="btn btn-primary">Sign Out</button> :
-                  <button className="btn btn-primary">Sign Up</button>}
+               <button className="btn btn-primary">Sign Up</button>
             </div>
             {/* or divider  */}
             <div class="flex items-center">
