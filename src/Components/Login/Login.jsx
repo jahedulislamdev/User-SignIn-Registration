@@ -22,7 +22,7 @@ const Login = () => {
       const email = e.target.email.value;
       const password = e.target.password.value;
 
-      signInUser(auth, email, password)
+      signInUser(email, password)
          .then((res) => {
             if (res.user.emailVerified) {
                toast.success("Login successful!");

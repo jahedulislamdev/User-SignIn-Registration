@@ -1,21 +1,15 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+// this contexet componet is unvalid !!! I haven't use it .
 import React, { createContext, useState } from 'react';
 import { getAuth } from 'firebase/auth';
 import app from './firebase_config';
 export const AuthContext = createContext(null);
+const auth = getAuth(app);
 const Context = ({ children }) => {
    const [AuthUser, setAuthUser] = useState(null); // State for user
-   const auth = getAuth(app)
-   // createUser 
-   const createUser = (email, password) => {
-      return createUserWithEmailAndPassword(auth, email, password)
-   }
-   //SigninUser 
-   const signInUser = (email, password) => {
-      return signInWithEmailAndPassword(auth, email, password)
-   }
+
+   const contxtInfo = "hello"
    return (
-      <AuthContext.Provider value={{ AuthUser, setAuthUser, createUser, signInUser }}>
+      <AuthContext.Provider value={contxtInfo}>
          {children}
       </AuthContext.Provider>
    );

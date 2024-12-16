@@ -11,7 +11,7 @@ import { IoMdEyeOff } from "react-icons/io";
 import toast, { Toaster } from "react-hot-toast";
 
 const Registration = () => {
-   const { setUser, createUser } = useContext(UserCheckerContext); // handle the user identification in navigation bar
+   const { createUser, setUser } = useContext(UserCheckerContext); // handle the user identification in navigation bar
    const [showPassword, setShowPassword] = useState(); // for hide and show password
    const [Err, setError] = useState(); // for handle the error message
    const auth = getAuth(app) // firebase auth (always need this)
@@ -37,14 +37,12 @@ const Registration = () => {
          setError("")
       }
       // Create account or signup with email and password
-      createUser(auth, email, password)
+      createUser(email, password)
          .then(result => {
             // update your profle Accroding to your Data
             updateProfile(result.user, {
                displayName: name,
             })
-
-            //verify your email lest unauthorized eamil couldn't loggedin
             sendEmailVerification(result.user)
                .then(() => {
                   alert("please Check your Eamil and verify your account")
