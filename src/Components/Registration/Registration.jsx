@@ -5,20 +5,20 @@ import { FaTwitter } from "react-icons/fa";
 import { FaFacebook } from "react-icons/fa";
 import { useContext, useState } from "react";
 import { UserCheckerContext } from "../../App";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { IoEye } from "react-icons/io5";
 import { IoMdEyeOff } from "react-icons/io";
 import toast, { Toaster } from "react-hot-toast";
 
 const Registration = () => {
-   const { setUser } = useContext(UserCheckerContext);
-   const [showPassword, setShowPassword] = useState();
-   const [Err, setError] = useState();
-   const auth = getAuth(app)
+   const { setUser, createUser } = useContext(UserCheckerContext); // handle the user identification in navigation bar
+   const [showPassword, setShowPassword] = useState(); // for hide and show password
+   const [Err, setError] = useState(); // for handle the error message
+   const auth = getAuth(app) // firebase auth (always need this)
    const handleSubmit = (e) => {
       // enchance the default behaviour
       e.preventDefault();
-      // get inputs value
+      // Retrieve form inputs
       const name = e.target.name.value;
       const email = e.target.email.value;
       const password = e.target.password.value;
@@ -37,7 +37,7 @@ const Registration = () => {
          setError("")
       }
       // Create account or signup with email and password
-      createUserWithEmailAndPassword(auth, email, password)
+      createUser(auth, email, password)
          .then(result => {
             // update your profle Accroding to your Data
             updateProfile(result.user, {
@@ -113,7 +113,7 @@ const Registration = () => {
             </div>
             <div className='flex px-2'>
                <input type="checkbox" name='terms' id='terms' />
-               <label className='ms-1 sm:text-sm ' htmlFor="terms">Accept our <a href="#" className="text-blue-500">Terms and conditions</a></label>
+               <label className='ms-1 sm:text-sm ' htmlFor="terms">Accept our <Link to={'/terms'} className="text-blue-500">Terms and conditions</Link></label>
             </div>
             <div className="form-control mt-3">
                <button className="btn btn-primary">Sign Up</button>

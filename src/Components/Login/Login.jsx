@@ -9,7 +9,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 const Login = () => {
    const auth = getAuth(app); // Firebase Auth
-   const { user, setUser } = useContext(UserCheckerContext);
+   const { user, setUser, signInUser } = useContext(UserCheckerContext);
    const [showPassword, setShowPassword] = useState(false);
 
    const handleSignIn = (e) => {
@@ -22,7 +22,7 @@ const Login = () => {
       const email = e.target.email.value;
       const password = e.target.password.value;
 
-      signInWithEmailAndPassword(auth, email, password)
+      signInUser(auth, email, password)
          .then((res) => {
             if (res.user.emailVerified) {
                toast.success("Login successful!");
